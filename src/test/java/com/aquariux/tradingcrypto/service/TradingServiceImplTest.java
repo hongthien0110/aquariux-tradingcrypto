@@ -52,7 +52,7 @@ public class TradingServiceImplTest {
     when(tradeRepository.saveAndFlush(any(TradeEntity.class))).thenReturn(tradeEntity);
 
     var order = tradingService.placeOrder("123", Symbol.BTCUSDT, TradingType.LONG,
-        BigDecimal.ONE, BigDecimal.ONE);
+        BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE);
 
     assertEquals("Success", order.getStatus());
   }
@@ -78,7 +78,7 @@ public class TradingServiceImplTest {
     when(tradeRepository.saveAndFlush(any(TradeEntity.class))).thenReturn(tradeEntity);
 
     var order = tradingService.placeOrder("123", Symbol.BTCUSDT, TradingType.SHORT,
-        BigDecimal.ONE, BigDecimal.ONE);
+        BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE);
 
     assertEquals("Success", order.getStatus());
   }

@@ -5,6 +5,7 @@ import com.aquariux.tradingcrypto.service.WalletService;
 import com.aquariux.tradingcrypto.service.dto.Wallet;
 import com.aquariux.tradingcrypto.utils.constants.Constant;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,9 @@ public class UserController {
 
   private WalletService walletService;
 
-  @GetMapping("/wallet")
-  Wallet getWallet(
-      @RequestParam("currency") Currency currency,
+  @GetMapping(value = "/wallet", produces = "application/json")
+  List<Wallet> getWallet(
+      @RequestParam(value = "currency", required = false) Currency currency,
       HttpServletRequest request) {
     var userId = request.getHeader(Constant.USER_HEADER_KEY);
     checkUserPermission(userId);

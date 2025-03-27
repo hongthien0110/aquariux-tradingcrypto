@@ -11,7 +11,7 @@ import java.util.List;
 public interface TradingService {
 
   Order placeOrder(String userId, Symbol symbol, TradingType tradingType,
-      BigDecimal price, BigDecimal quantity) throws Exception;
+      BigDecimal bidPrice, BigDecimal askPrice, BigDecimal quantity) throws Exception;
 
   List<OrderHistoryResponse> getHistory(OrderHistory history) throws Exception;
 }

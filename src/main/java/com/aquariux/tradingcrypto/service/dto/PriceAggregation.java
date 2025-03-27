@@ -19,7 +19,5 @@ public class PriceAggregation {
   private Symbol symbol;
   private CryptoCurrency cryptoCurrencyName;
   private BigDecimal bidPrice;
-  private BigDecimal bidQty;
   private BigDecimal askPrice;
-  private BigDecimal askQty;
 }

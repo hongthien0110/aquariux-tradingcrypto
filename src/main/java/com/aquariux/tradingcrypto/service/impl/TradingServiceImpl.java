@@ -17,6 +17,7 @@ import com.aquariux.tradingcrypto.utils.enums.TradingType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.naming.InsufficientResourcesException;
 import lombok.AllArgsConstructor;
@@ -35,17 +36,23 @@ public class TradingServiceImpl implements TradingService {
   @Override
   @Transactional
   public Order placeOrder(String userId, Symbol symbol, TradingType tradingType,
-      BigDecimal price, BigDecimal quantity) throws InsufficientResourcesException {
+      BigDecimal bidPrice, BigDecimal askPrice, BigDecimal quantity)
+      throws Exception {
 
     var longWallet = getAndValidateWallet(userId, symbol.getLongCurrency());
     var shortWallet = getAndValidateWallet(userId, symbol.getShortCurrency());
     WalletEntity wallet;
+    BigDecimal price;
+    BigDecimal previousBalance;
 
     if (tradingType.equals(TradingType.LONG)) {
+      price = askPrice;
       var minusAmount = price.multiply(quantity);
       if (isSufficientBalance(longWallet.getBalance(), minusAmount)) {
         throw new InsufficientBalanceException("Insufficient balance");
       }
+
+      previousBalance = longWallet.getBalance();
 
       longWallet.setBalance(longWallet.getBalance().subtract(minusAmount));
       longWallet = walletRepository.saveAndFlush(longWallet);
@@ -54,9 +61,12 @@ public class TradingServiceImpl implements TradingService {
       shortWallet.setBalance(shortWallet.getBalance().add(quantity));
       walletRepository.saveAndFlush(shortWallet);
     } else {
+      price = bidPrice;
       if (isSufficientBalance(shortWallet.getBalance(), quantity)) {
         throw new InsufficientResourcesException("Insufficient balance");
       }
+
+      previousBalance = shortWallet.getBalance();
 
       shortWallet.setBalance(shortWallet.getBalance().subtract(quantity));
       shortWallet = walletRepository.saveAndFlush(shortWallet);
@@ -79,15 +89,15 @@ public class TradingServiceImpl implements TradingService {
     log.info("Your trade {} has been placed order", tradeEntity.getId());
 
     return Order.builder().orderId(tradeEntity.getId())
-        .balance(wallet.getBalance())
+        .balance(previousBalance)
         .newBalance(wallet.getBalance())
-        .timestamp(tradeEntity.getTimestamp().toEpochSecond(ZoneOffset.UTC))
+        .timestamp(tradeEntity.getTimestamp().format(DateTimeFormatter.ISO_DATE_TIME))
         .status(tradeEntity.getStatus())
         .build();
   }
 
   @Override
-  public List<OrderHistoryResponse> getHistory(OrderHistory history) {
+  public List<OrderHistoryResponse> getHistory(OrderHistory history) throws Exception {
     var entities = tradeRepository.getHistory(history.getUserId(), history.getSymbol(),
         history.getTradingType(), history.getFrom(), history.getTo(), history.getLimit(),
         history.getOffset());

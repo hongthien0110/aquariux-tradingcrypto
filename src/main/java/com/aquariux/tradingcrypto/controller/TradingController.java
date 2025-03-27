@@ -12,6 +12,7 @@ import com.aquariux.tradingcrypto.service.TradingService;
 import com.aquariux.tradingcrypto.service.dto.Order;
 import com.aquariux.tradingcrypto.utils.constants.Constant;
 import jakarta.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,8 +47,19 @@ public class TradingController {
       HttpServletRequest servletRequest) throws Exception {
     var userId = servletRequest.getHeader(Constant.USER_HEADER_KEY);
     checkUserPermission(userId);
-    return tradingService.placeOrder(userId, orderRequest.getSymbol(),
-        orderRequest.getTradingType(), orderRequest.getPrice(), orderRequest.getQuantity());
+
+    Symbol symbol = orderRequest.getSymbol();
+    TradingType tradingType = orderRequest.getTradingType();
+    BigDecimal quantity = orderRequest.getQuantity();
+
+    PriceAggregation priceAggregation = priceAggregationService.getBestPrice(
+        symbol, tradingType);
+
+    BigDecimal bidPrice = priceAggregation.getBidPrice();
+    BigDecimal askPrice = priceAggregation.getAskPrice();
+
+    return tradingService.placeOrder(userId, symbol, tradingType, bidPrice, askPrice,
+        quantity);
   }
 
   @GetMapping(value = "/history", produces = "application/json")

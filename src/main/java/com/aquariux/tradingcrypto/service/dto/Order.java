@@ -1,6 +1,7 @@
 package com.aquariux.tradingcrypto.service.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,5 @@ public class Order {
   private BigDecimal balance;
   private BigDecimal newBalance;
   private String status;
-  private long timestamp;
+  private String timestamp;
 }
