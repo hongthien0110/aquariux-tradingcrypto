@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 public final class Constant {
 
   public static final String USER_HEADER_KEY = "user-id";
-//  public static final String IDEMPOTENCY_KEY_HEADER = "idempotency-key";
+  public static final String IDEMPOTENCY_HEADER_KEY = "idempotency-key";
 }

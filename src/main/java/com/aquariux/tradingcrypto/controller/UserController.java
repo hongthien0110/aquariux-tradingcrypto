@@ -2,7 +2,7 @@ package com.aquariux.tradingcrypto.controller;
 
 import com.aquariux.tradingcrypto.utils.enums.Currency;
 import com.aquariux.tradingcrypto.service.WalletService;
-import com.aquariux.tradingcrypto.service.entity.Wallet;
+import com.aquariux.tradingcrypto.service.dto.Wallet;
 import com.aquariux.tradingcrypto.utils.constants.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -24,11 +24,11 @@ public class UserController {
       HttpServletRequest request) {
     var userId = request.getHeader(Constant.USER_HEADER_KEY);
     checkUserPermission(userId);
-    return walletService.getWalletByUserId(userId, currency);
+    return walletService.findWalletByUserIdAndCurrency(userId, currency);
   }
 
   private void checkUserPermission(String userId) {
-    if (userId.isBlank()) {
+    if (userId.isEmpty()) {
       throw new IllegalArgumentException("Missing user id");
     }
   }

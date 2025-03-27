@@ -1,15 +1,15 @@
 package com.aquariux.tradingcrypto.controller;
 
+import com.aquariux.tradingcrypto.service.dto.PriceAggregation;
 import com.aquariux.tradingcrypto.utils.enums.Symbol;
 import com.aquariux.tradingcrypto.utils.enums.TradingType;
-import com.aquariux.tradingcrypto.exception.CryptoException;
+import com.aquariux.tradingcrypto.exception.NotFoundException;
 import com.aquariux.tradingcrypto.model.OrderHistory;
 import com.aquariux.tradingcrypto.model.OrderHistoryResponse;
 import com.aquariux.tradingcrypto.model.OrderRequest;
 import com.aquariux.tradingcrypto.service.PriceAggregationService;
 import com.aquariux.tradingcrypto.service.TradingService;
-import com.aquariux.tradingcrypto.service.entity.Order;
-import com.aquariux.tradingcrypto.service.entity.PriceAggregation;
+import com.aquariux.tradingcrypto.service.dto.Order;
 import com.aquariux.tradingcrypto.utils.constants.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -30,14 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class TradingController {
 
   private TradingService tradingService;
-  private PriceAggregationService aggregatedPriceService;
+  private PriceAggregationService priceAggregationService;
 
   @GetMapping(value = "/best-price", produces = "application/json")
   PriceAggregation getBestPrice(
       @RequestParam("symbol") Symbol symbol,
       @RequestParam("tradingType") TradingType tradingType,
-      HttpServletRequest servletRequest) throws CryptoException {
-    return aggregatedPriceService.getBestPrice(symbol, tradingType);
+      HttpServletRequest servletRequest) throws NotFoundException {
+    return priceAggregationService.getBestPrice(symbol, tradingType);
   }
 
   @PostMapping(value = "/place-order", produces = "application/json")
@@ -71,7 +71,7 @@ public class TradingController {
   }
 
   private void checkUserPermission(String userId) {
-    if (userId.isBlank()) {
+    if (userId.isEmpty()) {
       throw new IllegalArgumentException("Missing user id");
     }
   }

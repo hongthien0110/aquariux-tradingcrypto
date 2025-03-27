@@ -15,7 +15,8 @@ public interface TradeRepository extends JpaRepository<TradeEntity, String> {
 
   @Query("SELECT t FROM TradeEntity t WHERE t.userId = :userId " +
       "AND t.symbol = :symbol " +
-      "AND t.timestamp >= :from AND t.timestamp <= :to ORDER BY t.timestamp ASC " +
+      "AND t.timestamp >= :from AND t.timestamp <= :to " +
+      "ORDER BY t.timestamp ASC " +
       "LIMIT :limit OFFSET :offset ")
   List<TradeEntity> getHistory(@Param("userId") String userId, @Param("symbol") Symbol symbol,
       @Param("tradingType") TradingType tradingType, @Param("from") LocalDateTime from,

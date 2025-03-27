@@ -45,7 +45,8 @@ public class TradingServiceImplTest {
         .id("123")
         .tradingType(TradingType.LONG)
         .build();
-    when(walletRepository.findByUserIdAndCurrency(anyString(), any(Currency.class))).thenReturn(
+    when(walletRepository.findWalletByUserIdAndCurrency(anyString(),
+        any(Currency.class))).thenReturn(
         walletEntity);
     when(walletRepository.saveAndFlush(any(WalletEntity.class))).thenReturn(walletEntity);
     when(tradeRepository.saveAndFlush(any(TradeEntity.class))).thenReturn(tradeEntity);
@@ -70,7 +71,8 @@ public class TradingServiceImplTest {
         .id("123")
         .tradingType(TradingType.SHORT)
         .build();
-    when(walletRepository.findByUserIdAndCurrency(anyString(), any(Currency.class))).thenReturn(
+    when(walletRepository.findWalletByUserIdAndCurrency(anyString(),
+        any(Currency.class))).thenReturn(
         walletEntity);
     when(walletRepository.saveAndFlush(any(WalletEntity.class))).thenReturn(walletEntity);
     when(tradeRepository.saveAndFlush(any(TradeEntity.class))).thenReturn(tradeEntity);

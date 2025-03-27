@@ -1,17 +1,19 @@
-package com.aquariux.tradingcrypto.service.entity;
+package com.aquariux.tradingcrypto.service.dto;
 
 import com.aquariux.tradingcrypto.utils.enums.CryptoCurrency;
 import com.aquariux.tradingcrypto.utils.enums.Symbol;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class PriceAggregation {
 
   private Symbol symbol;

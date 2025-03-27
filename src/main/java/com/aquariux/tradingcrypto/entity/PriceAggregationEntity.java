@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class PriceAggregationEntity extends BaseEntity {
+public class PriceAggregationEntity {
 
   @Id
   @Enumerated(EnumType.STRING)

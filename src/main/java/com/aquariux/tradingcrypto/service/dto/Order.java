@@ -1,21 +1,22 @@
-package com.aquariux.tradingcrypto.service.entity;
+package com.aquariux.tradingcrypto.service.dto;
 
-import com.aquariux.tradingcrypto.utils.enums.Currency;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class Wallet {
+@Getter
+public class Order {
 
-  private String userId;
+  private String orderId;
   private BigDecimal balance;
-  private Currency currency;
+  private BigDecimal newBalance;
+  private String status;
+  private long timestamp;
 }

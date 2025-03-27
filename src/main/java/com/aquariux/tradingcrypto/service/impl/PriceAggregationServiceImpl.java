@@ -7,10 +7,10 @@ import com.aquariux.tradingcrypto.connection.BinanceConnection;
 import com.aquariux.tradingcrypto.connection.HuobiConnection;
 import com.aquariux.tradingcrypto.entity.PriceAggregationEntity;
 import com.aquariux.tradingcrypto.entity.PriceAggregationEntity.PriceAggregationKey;
-import com.aquariux.tradingcrypto.exception.CryptoException;
+import com.aquariux.tradingcrypto.exception.NotFoundException;
 import com.aquariux.tradingcrypto.repository.PriceAggregationRepository;
 import com.aquariux.tradingcrypto.service.PriceAggregationService;
-import com.aquariux.tradingcrypto.service.entity.PriceAggregation;
+import com.aquariux.tradingcrypto.service.dto.PriceAggregation;
 import com.aquariux.tradingcrypto.utils.MapperUtils;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,8 +32,8 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 
   @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
   private void getPrice() {
-    log.debug("Begin getting crypto price");
-    var binancePricesEntities = binanceConnection
+    log.debug("Begin get price");
+    var binanceTickerPrices = binanceConnection
         .getPriceAggregation()
         .stream()
         .filter(binanceTicker -> Symbol.isSupportedSymbol(binanceTicker.getSymbol())).map(
@@ -43,38 +43,40 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
                 .bidPrice(binanceTicker.getBidPrice()).bidQty(binanceTicker.getBidQty())
                 .askPrice(binanceTicker.getAskPrice()).askQty(binanceTicker.getAskQty()).build())
         .toList();
-    var huobiPricesEntities = huobiConnection.getPriceAggregation().getData().stream()
+
+    var huobiTickerPrices = huobiConnection.getPriceAggregation().getData().stream()
         .filter(huobiTicker -> Symbol.isSupportedSymbol(huobiTicker.getSymbol())).map(
             huobiTicker -> PriceAggregationEntity.builder().cryptoCurrencyName(CryptoCurrency.HUOBI)
                 .symbol(Symbol.valueOf(huobiTicker.getSymbol().toUpperCase()))
                 .bidPrice(huobiTicker.getBid()).bidQty(huobiTicker.getBidSize())
                 .askPrice(huobiTicker.getAsk()).askQty(huobiTicker.getAskSize()).build()).toList();
 
-    var combinedPriceEntities = Stream.concat(binancePricesEntities.stream(),
-        huobiPricesEntities.stream()).toList();
-    priceAggregationRepository.saveAllAndFlush(combinedPriceEntities);
+    var combinedPrices = Stream.concat(binanceTickerPrices.stream(),
+        huobiTickerPrices.stream()).toList();
+    priceAggregationRepository.saveAllAndFlush(combinedPrices);
 
-    log.debug("End getting crypto price");
+    log.debug("End get price");
   }
 
   @Override
   public PriceAggregation getBestPrice(Symbol symbol, TradingType tradingType) {
-    var entities = priceAggregationRepository.findAllById(Stream.of(
+    var priceEntities = priceAggregationRepository.findAllById(Stream.of(
         PriceAggregationKey.builder().symbol(symbol).cryptoCurrencyName(CryptoCurrency.BINANCE)
             .build(),
         PriceAggregationKey.builder().symbol(symbol).cryptoCurrencyName(CryptoCurrency.HUOBI)
             .build()).toList());
-    if (entities.isEmpty()) {
-      throw new CryptoException("Symbol not found");
+
+    if (priceEntities.isEmpty()) {
+      throw new NotFoundException("Symbol not found");
     }
-    var maxPrice = Collections.max(entities, Comparator.comparing(entity -> {
-      if (TradingType.LONG.equals(tradingType)) {
-        return entity.getBidPrice();
-      } else {
-        return entity.getAskPrice();
-      }
-    }));
-    log.info("The max price: {}", maxPrice.toString());
+
+    var maxPrice = Collections.max(priceEntities, Comparator.comparing(priceEntity ->
+        TradingType.LONG.equals(tradingType) ? priceEntity.getBidPrice()
+            : priceEntity.getAskPrice()));
+
+    if (maxPrice != null) {
+      log.info("The max price:::::: {}", maxPrice.toString());
+    }
     return MapperUtils.INSTANCE.toPriceAggregation(maxPrice);
   }
 }

@@ -1,9 +1,9 @@
 package com.aquariux.tradingcrypto.service;
 
 import com.aquariux.tradingcrypto.utils.enums.Currency;
-import com.aquariux.tradingcrypto.service.entity.Wallet;
+import com.aquariux.tradingcrypto.service.dto.Wallet;
 
 public interface WalletService {
 
-  Wallet getWalletByUserId(String userId, Currency currency);
+  Wallet findWalletByUserIdAndCurrency(String userId, Currency currency);
 }

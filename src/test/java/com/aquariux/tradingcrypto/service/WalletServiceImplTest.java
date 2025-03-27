@@ -23,8 +23,9 @@ public class WalletServiceImplTest {
 
   @Test
   void shouldReturnWallet() {
-    when(walletRepository.findWalletByUserId("123", Currency.USDT)).thenReturn(new WalletEntity());
-    var wallet = walletService.getWalletByUserId("123", Currency.USDT);
+    when(walletRepository.findWalletByUserIdAndCurrency("123", Currency.USDT)).thenReturn(
+        new WalletEntity());
+    var wallet = walletService.findWalletByUserIdAndCurrency("123", Currency.USDT);
     assertNotNull(wallet);
   }
 }

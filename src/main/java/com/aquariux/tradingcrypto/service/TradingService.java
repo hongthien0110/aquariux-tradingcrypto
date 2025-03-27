@@ -4,7 +4,7 @@ import com.aquariux.tradingcrypto.utils.enums.Symbol;
 import com.aquariux.tradingcrypto.utils.enums.TradingType;
 import com.aquariux.tradingcrypto.model.OrderHistory;
 import com.aquariux.tradingcrypto.model.OrderHistoryResponse;
-import com.aquariux.tradingcrypto.service.entity.Order;
+import com.aquariux.tradingcrypto.service.dto.Order;
 import java.math.BigDecimal;
 import java.util.List;
 
