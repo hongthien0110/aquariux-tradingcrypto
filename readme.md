@@ -4,15 +4,15 @@
 
 1. Retrieve the latest price from Binance, Huobi: using Spring Cloud OpenFeign
 2. Database: using In-memory H2
-3. CI/CD: Github Actions
+3. CI/CD: using Github Actions
 4. Handle duplicated requests: using idempotent key (not implemented)
 5. Handle distributed locks: using Redis (not implemented)
 
 # Run in docker container
 
-1. './gradlew clean build' for build project
-2. 'docker build -t tradingcrypto .' for build docker image
-3. 'docker run -p 8080:8080 tradingcrypto' for run docker image
+1. `./gradlew clean build` for build project
+2. `docker build -t tradingcrypto .` for build docker image
+3. `docker run -p 8080:8080 tradingcrypto` for run docker image
 
 # Features
 
