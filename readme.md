@@ -2,9 +2,10 @@
 
 # Overview
 
-1. Retrieve the latest price from trading crypto (Binance, Huobi): using Spring Cloud OpenFeign
+1. Retrieve the pricing from trading crypto (Binance, Huobi): using Spring Cloud OpenFeign
 2. Database: using In-memory H2
 3. CI/CD: using GitHub Actions
+4. Handle duplicated requests: using Idempotency key ( not implemented )
 
 # Run in Docker container
 
