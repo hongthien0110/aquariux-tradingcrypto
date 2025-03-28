@@ -14,23 +14,26 @@
 3. `docker run -p 8080:8080 tradingcrypto` to run Docker image
 
 # Main features
++ Postman Collection:
+https://www.postman.com/api-team-6723/thienlai/collection/a1kcq7t/aquariux-apis?action=share&creator=4946196
 
 1. Retrieve the latest price from trading crypto (Binance, Huobi) after every 10s
    
-   ![image](https://github.com/user-attachments/assets/1b1d5ff5-8574-4cf3-bafd-8c2207bf73e6)
-   
+   ![image](https://github.com/user-attachments/assets/072e4a77-692a-423c-8ae9-a217d8b91303)
+
 2. Retrieve the latest best aggregated price
    
-   ![image](https://github.com/user-attachments/assets/7bfb0a6d-c397-4958-8c7c-039de197c317)
+   ![image](https://github.com/user-attachments/assets/5c9dcf60-897a-415f-9a62-3841e7029b7a)
    
 3. Users can trade based on the latest best aggregated price
    
-   ![image](https://github.com/user-attachments/assets/55ccd8f8-dd4c-4262-97b4-f2632445b726)
-   
+   ![image](https://github.com/user-attachments/assets/829e30c7-0b75-4fbd-9cce-cb625fc5fb89)
+
 4. Retrieve the user’s crypto currencies wallet balance
     
-   ![image](https://github.com/user-attachments/assets/2a1c873c-4b1f-4656-9d9f-cfca58d29b94)
+   ![image](https://github.com/user-attachments/assets/93e3677a-4366-47c1-80b6-f0da85b17edd)
    
 5. Retrieve the user's trading history
     
-   ![image](https://github.com/user-attachments/assets/e08659a7-0c20-459e-88db-2a7b76bb0af1)
+   ![image](https://github.com/user-attachments/assets/1ae20902-c856-4823-99be-c1cb3587455f)
+
