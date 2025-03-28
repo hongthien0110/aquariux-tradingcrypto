@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface BinanceConnection {
 
   @GetMapping(value = "/api/v3/ticker/bookTicker")
-  BinanceTickersResponse getPriceAggregation();
+  BinanceTickersResponse getBinancePriceAggregation();
 }

@@ -33,9 +33,9 @@ public class PriceAggregationServiceImplTest {
         .cryptoCurrencyName(CryptoCurrency.BINANCE)
         .symbol(Symbol.BTCUSDT)
         .bidPrice(new BigDecimal(10000))
-        .bidQty(new BigDecimal(10))
+        .bidQuantity(new BigDecimal(10))
         .askPrice(new BigDecimal(10000))
-        .askQty(new BigDecimal(10))
+        .askQuantity(new BigDecimal(10))
         .build();
     when(repository.findAllById(any())).thenReturn(Collections.singletonList(entity));
     var priceAggregation = this.priceAggregationService.getBestPrice(Symbol.BTCUSDT,

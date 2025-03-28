@@ -1,8 +1,5 @@
 package com.aquariux.tradingcrypto.service.impl;
 
-import com.aquariux.tradingcrypto.utils.enums.CryptoCurrency;
-import com.aquariux.tradingcrypto.utils.enums.Symbol;
-import com.aquariux.tradingcrypto.utils.enums.TradingType;
 import com.aquariux.tradingcrypto.connection.BinanceConnection;
 import com.aquariux.tradingcrypto.connection.HuobiConnection;
 import com.aquariux.tradingcrypto.entity.PriceAggregationEntity;
@@ -12,6 +9,9 @@ import com.aquariux.tradingcrypto.repository.PriceAggregationRepository;
 import com.aquariux.tradingcrypto.service.PriceAggregationService;
 import com.aquariux.tradingcrypto.service.dto.PriceAggregation;
 import com.aquariux.tradingcrypto.utils.MapperUtils;
+import com.aquariux.tradingcrypto.utils.enums.CryptoCurrency;
+import com.aquariux.tradingcrypto.utils.enums.Symbol;
+import com.aquariux.tradingcrypto.utils.enums.TradingType;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +22,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log4j2
 @AllArgsConstructor
+@Log4j2
 public class PriceAggregationServiceImpl implements PriceAggregationService {
 
   private final BinanceConnection binanceConnection;
@@ -33,23 +33,24 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
   @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
   private void getPrice() {
     log.debug("Begin get price");
-    var binanceTickerPrices = binanceConnection
-        .getPriceAggregation()
-        .stream()
+    var binanceTickerPrices = binanceConnection.getBinancePriceAggregation().stream()
         .filter(binanceTicker -> Symbol.isSupportedSymbol(binanceTicker.getSymbol())).map(
             binanceTicker -> PriceAggregationEntity.builder()
                 .cryptoCurrencyName(CryptoCurrency.BINANCE)
                 .symbol(Symbol.valueOf(binanceTicker.getSymbol().toUpperCase()))
-                .bidPrice(binanceTicker.getBidPrice()).bidQty(binanceTicker.getBidQty())
-                .askPrice(binanceTicker.getAskPrice()).askQty(binanceTicker.getAskQty()).build())
+                .bidPrice(binanceTicker.getBidPrice()).bidQuantity(binanceTicker.getBidQty())
+                .askPrice(binanceTicker.getAskPrice()).askQuantity(binanceTicker.getAskQty())
+                .build())
         .toList();
 
-    var huobiTickerPrices = huobiConnection.getPriceAggregation().getData().stream()
+    var huobiTickerPrices = huobiConnection.getHuobiPriceAggregation().getData().stream()
         .filter(huobiTicker -> Symbol.isSupportedSymbol(huobiTicker.getSymbol())).map(
             huobiTicker -> PriceAggregationEntity.builder().cryptoCurrencyName(CryptoCurrency.HUOBI)
                 .symbol(Symbol.valueOf(huobiTicker.getSymbol().toUpperCase()))
-                .bidPrice(huobiTicker.getBid()).bidQty(huobiTicker.getBidSize())
-                .askPrice(huobiTicker.getAsk()).askQty(huobiTicker.getAskSize()).build()).toList();
+                .bidPrice(huobiTicker.getBid()).bidQuantity(huobiTicker.getBidSize())
+                .askPrice(huobiTicker.getAsk()).askQuantity(huobiTicker.getAskSize())
+                .build())
+        .toList();
 
     var combinedPrices = Stream.concat(binanceTickerPrices.stream(),
         huobiTickerPrices.stream()).toList();
@@ -74,9 +75,7 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
         TradingType.LONG.equals(tradingType) ? priceEntity.getBidPrice()
             : priceEntity.getAskPrice()));
 
-    if (maxPrice != null) {
-      log.info("The max price:::::: {}", maxPrice.toString());
-    }
+    log.info("The best price :::::: {}", maxPrice.toString());
     return MapperUtils.INSTANCE.toPriceAggregation(maxPrice);
   }
 }

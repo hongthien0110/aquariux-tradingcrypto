@@ -11,9 +11,4 @@ public class IdempotencyServiceImpl implements IdempotencyService {
     return false;
   }
 
-  @Override
-  public void setIdempotent(String key) {
-
-  }
-
 }

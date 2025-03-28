@@ -37,11 +37,11 @@ public class PriceAggregationEntity {
 
   private BigDecimal bidPrice;
 
-  private BigDecimal bidQty;
+  private BigDecimal bidQuantity;
 
   private BigDecimal askPrice;
 
-  private BigDecimal askQty;
+  private BigDecimal askQuantity;
 
   @Builder
   @AllArgsConstructor

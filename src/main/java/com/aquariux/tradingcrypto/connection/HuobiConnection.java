@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface HuobiConnection {
 
   @GetMapping(value = "/market/tickers")
-  HuobiTickersResponse getPriceAggregation();
+  HuobiTickersResponse getHuobiPriceAggregation();
 }
