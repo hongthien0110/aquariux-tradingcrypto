@@ -19,6 +19,6 @@ public interface TradeRepository extends JpaRepository<TradeEntity, String> {
       "ORDER BY t.timestamp DESC " +
       "LIMIT :limit OFFSET :offset ")
   List<TradeEntity> getHistory(@Param("userId") String userId, @Param("symbol") Symbol symbol,
-      @Param("tradingType") TradingType tradingType, @Param("from") LocalDateTime from,
-      @Param("to") LocalDateTime to, @Param("limit") int limit, @Param("offset") int offset);
+      @Param("from") LocalDateTime from, @Param("to") LocalDateTime to,
+      @Param("limit") int limit, @Param("offset") int offset);
 }

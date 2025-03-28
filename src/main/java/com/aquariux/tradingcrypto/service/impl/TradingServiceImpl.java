@@ -99,8 +99,7 @@ public class TradingServiceImpl implements TradingService {
   @Override
   public List<OrderHistoryResponse> getHistory(OrderHistory history) throws Exception {
     var entities = tradeRepository.getHistory(history.getUserId(), history.getSymbol(),
-        history.getTradingType(), history.getFrom(), history.getTo(), history.getLimit(),
-        history.getOffset());
+        history.getFrom(), history.getTo(), history.getLimit(), history.getOffset());
     return entities.stream().map(MapperUtils.INSTANCE::toOrderHistory).toList();
 
   }

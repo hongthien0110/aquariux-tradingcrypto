@@ -65,7 +65,7 @@ public class TradingController {
   @GetMapping(value = "/history", produces = "application/json")
   List<OrderHistoryResponse> getHistory(
       @RequestParam("symbol") Symbol symbol,
-      @RequestParam("tradingType") TradingType tradingType,
+      @RequestParam(value = "tradingType", required = false) TradingType tradingType,
       @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
       @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
       @RequestParam(value = "limit", defaultValue = "50") int limit,
